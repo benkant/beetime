@@ -11,6 +11,26 @@ class beeconf():
 
         self.bee = self.col.conf[BEE]
         self.check()
+        self.set_my_settings()
+
+
+    def set_my_settings(self):
+        '''set settings for my hacked in goals
+
+        since they are only editable in code, not GUI'''
+        my_goals = {
+            "japanese_maintained_progress": "japanese-anki-maintained-progress",
+            "music_maintained_progress": "learn-music",
+            "programming_maintained_progress": "programming-anki"}
+
+        for (goal, slug) in my_goals.items():
+            self.bee.setdefault(goal, {})
+            self.bee[goal].setdefault('did', None)
+            self.bee[goal].setdefault('lastupload', None)
+            self.bee[goal]['enabled'] = True
+            self.bee[goal]['overwrite'] = False
+            self.bee[goal]['slug'] = slug
+
 
     def store(self):
         self.col.conf[BEE] = self.bee

@@ -63,3 +63,8 @@ select count() from cards
 where (due < ? and queue in (2,3))
 or (due < ? and queue = 1)""", dueDays, col.sched.dayCutoff)
     return cardsDue
+
+def lookupMaintainedProgress(col, deck, card=None):
+    cardClause = "card:%s" % card if card else ""
+    cards = col.findCards("deck:%s -is:suspended -is:new -is:due -is:buried %s" % (deck, cardClause))
+    return len(cards)

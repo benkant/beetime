@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from api import getApi, sendApi
 from config import beeconf
 from lookup import *
@@ -43,6 +44,16 @@ def syncDispatch(col=None, at=None):
         reportTime -= datetime.timedelta(days=1)
     # convert the datetime object to a Unix timestamp
     reportTimestamp = time.mktime(reportTime.timetuple())
+
+    # my stuff hacked in
+    my_comment = timestampComment("updated by addon", now, False)
+    japaneseCount = lookupMaintainedProgress(col, u'日本語')
+    prepareApiCall(col, reportTimestamp, japaneseCount, my_comment, 'japanese_maintained_progress')
+    musicCount = lookupMaintainedProgress(col, 'Music', 'music')
+    prepareApiCall(col, reportTimestamp, musicCount, my_comment, 'music_maintained_progress')
+    programmingCount = lookupMaintainedProgress(col, 'Programming')
+    prepareApiCall(col, reportTimestamp, programmingCount, my_comment, 'programming_maintained_progress')
+
 
     if isEnabled('time') or isEnabled('reviewed'):
         numberOfCards, reviewTime = lookupReviewed(col, odo = bc.tget('odo'))
